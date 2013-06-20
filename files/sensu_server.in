@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: sensu_server
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# sensu_server_enable (bool):		Set to NO by default.
+#                               	Set it to YES to enable sensu_server.
+# sensu_server_config_file (str):	Set to %%SENSU_SERVER_CONFIG_FILE%% by default.
+# sensu_server_config_dir (str):	Set to %%SENSU_SERVER_CONFIG_DIR%% by default.
+# sensu_server_logfile (str):		Set to %%SENSU_SERVER_LOG_FILE%% by default.
+#
+
+. /etc/rc.subr
+
+name="sensu_server"
+rcvar=`set_rcvar`
+
+load_rc_config "${name}"
+
+: ${sensu_server_enable:="NO"}
+: ${sensu_server_config_file="%%SENSU_SERVER_CONFIG_FILE%%"}
+: ${sensu_server_config_dir="%%SENSU_SERVER_CONFIG_DIR%%"}
+: ${sensu_server_logfile="%%SENSU_SERVER_LOG_FILE%%"}
+
+pidfile="/var/run/${name}.pid"
+command_interpreter="%%RUBY%%"
+command="/usr/local/bin/sensu-server"
+command_args="-v -b -c ${sensu_server_config_file} -d ${sensu_server_config_dir} -l ${sensu_server_logfile} -p ${pidfile}"
+
+run_rc_command "$1"
+

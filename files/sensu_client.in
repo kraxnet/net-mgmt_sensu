@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: sensu_client
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# sensu_client_enable (bool):		Set to NO by default.
+#                               	Set it to YES to enable sensu_client.
+# sensu_client_config_file (str):	Set to %%SENSU_CLIENT_CONFIG_FILE%% by default.
+# sensu_client_config_dir (str):	Set to %%SENSU_CLIENT_CONFIG_DIR%% by default.
+# sensu_client_logfile (str):		Set to %%SENSU_CLIENT_LOG_FILE%% by default.
+#
+
+. /etc/rc.subr
+
+name="sensu_client"
+rcvar=`set_rcvar`
+
+load_rc_config "${name}"
+
+: ${sensu_client_enable:="NO"}
+: ${sensu_client_config_file="%%SENSU_CLIENT_CONFIG_FILE%%"}
+: ${sensu_client_config_dir="%%SENSU_CLIENT_CONFIG_DIR%%"}
+: ${sensu_client_logfile="%%SENSU_CLIENT_LOG_FILE%%"}
+
+pidfile="/var/run/${name}.pid"
+command_interpreter="%%RUBY%%"
+command="/usr/local/bin/sensu-client"
+command_args="-v -b -c ${sensu_client_config_file} -d ${sensu_client_config_dir} -l ${sensu_client_logfile} -p ${pidfile}"
+
+run_rc_command "$1"
+

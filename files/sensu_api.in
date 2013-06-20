@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: sensu_api
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# sensu_api_enable (bool):		Set to NO by default.
+#                               	Set it to YES to enable sensu_api.
+# sensu_api_config_file (str):	Set to %%SENSU_API_CONFIG_FILE%% by default.
+# sensu_api_config_dir (str):	Set to %%SENSU_API_CONFIG_DIR%% by default.
+# sensu_api_logfile (str):		Set to %%SENSU_API_LOG_FILE%% by default.
+#
+
+. /etc/rc.subr
+
+name="sensu_api"
+rcvar=`set_rcvar`
+
+load_rc_config "${name}"
+
+: ${sensu_api_enable:="NO"}
+: ${sensu_api_config_file="%%SENSU_API_CONFIG_FILE%%"}
+: ${sensu_api_config_dir="%%SENSU_API_CONFIG_DIR%%"}
+: ${sensu_api_logfile="%%SENSU_API_LOG_FILE%%"}
+
+pidfile="/var/run/${name}.pid"
+command_interpreter="%%RUBY%%"
+command="/usr/local/bin/sensu-api"
+command_args="-v -b -c ${sensu_api_config_file} -d ${sensu_api_config_dir} -l ${sensu_api_logfile} -p ${pidfile}"
+
+run_rc_command "$1"
+

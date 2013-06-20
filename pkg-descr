@@ -1,0 +1,12 @@
+Sensu is often described as the "monitoring router". Most simply put, 
+Sensu connects "check" scripts run across many nodes with "handler" 
+scripts run on one or more Sensu servers. Checks are used, for example,
+to determine if Apache is up or down. Checks can also be used to collect
+metrics (such as MySQL or Apache statistics). The output of checks is
+routed to one or more handlers. Handlers determine what to do with the
+results of checks. Handlers currently exist for sending alerts via email,
+as well as to various external services such as Pagerduty, IRC, Twitter,
+etc. Handlers can also feed metrics into Graphite, Librato, etc. Writing
+checks and handlers is quite simple and can be done in any language.
+
+WWW: http://sensuapp.org/
